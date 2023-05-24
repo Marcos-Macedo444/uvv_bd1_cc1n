@@ -1,4 +1,4 @@
-/*Este banco de dados (uvv) terá por finalidade cadastrar e identificar clientes.
+/*Este banco de dados (uvv) terá por finalidade cadastrar e identificar clientes. 
 O cliente também poderá ver o status dos pedidos, conseguindo
 identificar e análisar como se encontra o pedido.
 Terá os dados, localizações das lojas dando total suporte
