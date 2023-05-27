@@ -1,4 +1,4 @@
-/*Este banco de dados (uvv) terá por finalidade cadastrar e identificar clientes.
+/*Este banco de dados (uvv) terá por finalidade cadastrar e identificar clientes. 
 O cliente também poderá ver o status dos pedidos, conseguindo
 identificar e análisar como se encontra o pedido.
 Terá os dados, localizações das lojas dando total suporte
@@ -516,7 +516,7 @@ identificar o envio do produto.
 Está coluna é uma primary key da tabela.
 Está coluna faz parte da tabela (lojas.pedidos_itens).';
 
-/*adicionando as foreign keys para dar
+/*Adicionando as foreign keys para dar
 relacionamentos entre as tabelas.*/
 
 ALTER TABLE lojas.pedidos_itens
