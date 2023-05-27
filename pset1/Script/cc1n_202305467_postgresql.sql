@@ -516,7 +516,7 @@ identificar o envio do produto.
 Está coluna é uma primary key da tabela.
 Está coluna faz parte da tabela (lojas.pedidos_itens).';
 
-/*Adicionando as foreign keys para dar
+/* Adicionando as foreign keys para dar
 relacionamentos entre as tabelas.*/
 
 ALTER TABLE lojas.pedidos_itens
