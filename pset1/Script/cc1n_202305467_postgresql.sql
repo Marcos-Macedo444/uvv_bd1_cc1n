@@ -7,14 +7,20 @@ para os clientes.
 identificar envios, estoques e itens do pedido.*/
 
 -- Excluindo banco de dados se estiver algum criado.
+
 DROP DATABASE IF EXISTS uvv;
+
 -- Excluindo usuário se estiver algum criado.
+
 DROP USER IF EXISTS marcos;
 
---Criando usuário.
+/*Criando usuário com permissões para criar banco de dados e usuários,
+e definindo uma senha encrypted.*/
+
 CREATE USER marcos WITH createdb createrole encrypted password 'sevira';
 
 -- Criação do banco de dados "uvv".
+
 CREATE DATABASE uvv
     WITH 
     OWNER = marcos
@@ -24,20 +30,26 @@ CREATE DATABASE uvv
     LC_CTYPE = 'pt_BR.UTF-8'
     ALLOW_CONNECTIONS = true;
 
+
 -- logando no banco de dados e no usuário criado.
+
 \c "dbname=uvv user=marcos password=sevira"
 
 -- Criação do esquema.
+
 CREATE SCHEMA IF NOT EXISTS lojas AUTHORIZATION marcos;
 
+-- Colocando o esquema "lojas" como padrão permanentemente.
+ALTER USER marcos
+SET SEARCH_PATH TO lojas, "$user", public;
 
 -- Criação da tabela (produtos).
 CREATE TABLE lojas.produtos (
 produto_id                    NUMERIC  (38)    NOT NULL,
 nome                          VARCHAR  (255)   NOT NULL,
 preco_unitario                NUMERIC  (10,2)          ,
-detalhes BYTEA,
-imagem BYTEA,
+detalhes                      BYTEA                    ,
+imagem                        BYTEA                    ,
 imagem_mime_type              VARCHAR  (512)           ,
 imagem_arquivo                VARCHAR  (512)           ,
 imagem_charset                VARCHAR  (512)           ,
@@ -46,12 +58,14 @@ CONSTRAINT pk_produtos PRIMARY KEY (produto_id)
 );
 
 -- Adicionando checagem na coluna "preco_unitario" para que seja acima de 0.
+
 ALTER TABLE lojas.produtos
 ADD CONSTRAINT ck_preco_unitario_produtos
 CHECK
 (preco_unitario > 0);
 
 -- Comentários das colunas e da tabela em geral (produtos):
+
 COMMENT ON TABLE lojas.produtos
                         IS 
 'Criação da tabela "produtos" que têm finalidade identificar
@@ -101,7 +115,7 @@ Está coluna faz parte da tabela (lojas.produtos).';
 
 COMMENT ON COLUMN lojas.produtos.imagem_charset
                         IS 
-'Criação da coluna "imagem_charset" que têm finalidade  exibir caracteres
+'Criação da coluna "imagem_charset" que têm finalidade exibir caracteres
 especiais ou algoritmos complexos em uma imagem.
 Está coluna faz parte da tabela (lojas.produtos).';
 
@@ -118,7 +132,7 @@ endereco_web              VARCHAR  (100)            ,
 endereco_fisico           VARCHAR  (512)            ,
 latitude                  NUMERIC                   ,
 longitude                 NUMERIC                   ,
-logo BYTEA                                          ,                            
+logo BYTEA                                              ,                            
 logo_mime_type            VARCHAR  (512)            ,
 logo_arquivo              VARCHAR  (512)            ,
 logo_charset              VARCHAR  (512)            ,
@@ -126,14 +140,17 @@ logo_ultima_atualizacao   DATE                      ,
 CONSTRAINT pk_lojas PRIMARY KEY (loja_id)
 );
 
-/*Adicionando uma checagem para coluna (lojas.lojas) na coluna endereco_web e endereco_fisico para que uma delas
+/*Adicionando uma checagem para coluna (lojas.lojas) na coluna endereco_web
+e endereco_fisico para que uma delas
 não seja nula.*/
+
 ALTER TABLE lojas.lojas
 ADD CONSTRAINT ck_endereco
 CHECK
 (endereco_fisico IS NOT NULL OR endereco_web IS NOT NULL);
 
 -- Comentários da tabela e das colunas em geral (lojas.lojas).
+
 COMMENT ON TABLE lojas.lojas
                         IS 
 'Criação da tabela lojas que têm por finalidade
@@ -183,7 +200,8 @@ Está coluna faz parte da tabela (lojas.lojas).';
 
 COMMENT ON COLUMN lojas.lojas.logo_mime_type
                         IS
-'Criação da coluna "logo_mime_type" que têm por finalidade identificar o formato
+'Criação da coluna "logo_mime_type" que têm por
+finalidade identificar o formato
 do arquivo da logo, para que outros aplicativos da web
 identifiquem o tipo de conteúdo de um arquivo.
 Está coluna faz parte da tabela (lojas.lojas).';
@@ -191,7 +209,8 @@ Está coluna faz parte da tabela (lojas.lojas).';
 COMMENT ON COLUMN lojas.lojas.logo_arquivo
                         IS 
 'Criação da coluna "logo_arquivo" que têm por
-finalidade exibir o formato da imagem em que está o arquivo da loja.
+finalidade exibir o formato da imagem em que está o
+arquivo da loja.
 Está coluna faz parte da tabela (lojas.lojas).';
 
 COMMENT ON COLUMN lojas.lojas.logo_charset
@@ -202,7 +221,8 @@ Está coluna faz parte da tabela (lojas.lojas).';
 
 COMMENT ON COLUMN lojas.lojas.logo_ultima_atualizacao
                         IS 
-'Criação da coluna "logo_ultima_atualizacao" que têm por finalidade armazenar o nome da última imagem
+'Criação da coluna "logo_ultima_atualizacao" que têm por finalidade
+armazenar o nome da última imagem
 adicionada ou atualizada na tabela.
 Está coluna faz parte da tabela (lojas.lojas).';
 
@@ -215,12 +235,14 @@ CONSTRAINT pk_estoques PRIMARY KEY (estoque_id)
 );
 
 -- Adicionando checagem na tabela (lojas.estoques) para que a quantidade seja acima de 0.
+
 ALTER TABLE lojas.estoques
 ADD CONSTRAINT ck_quantidade_estoques
 CHECK
 (quantidade > 0);
 
---Comentários das colunas e da tabela em geral (lojas.estoques)
+--Comentários das colunas e da tabela em geral (lojas.estoques).
+
 COMMENT ON TABLE lojas.estoques
                         IS 
 'Criação da tabela "estoques" que têm finalidade de
@@ -228,41 +250,44 @@ identificar quantidades, produtos, lojas e estoques.';
 
 COMMENT ON COLUMN lojas.estoques.estoque_id
                         IS 
-'Criação da tabela "estoque_id" que têm finalidade
+'Criação da coluna "estoque_id" que têm finalidade
 identificar estoques.
 Está coluna é uma primary key da tabela.
 Está coluna faz parte da tabela (lojas.estoques).';
 
 COMMENT ON COLUMN lojas.estoques.loja_id
                         IS 
-'Criação da tabela "loja_id" que têm finalidade
+'Criação da coluna "loja_id" que têm finalidade
 identificar o estoque de produtos da loja.
 Está coluna é uma foreign key da tabela.
 Está coluna faz parte da tabela (lojas.estoques).';
 
 COMMENT ON COLUMN lojas.estoques.produto_id
                         IS 
-'Criação da coluna "produto_id" que têm finalidade identificar os produtos.
+'Criação da coluna "produto_id" que têm finalidade
+identificar os produtos.
 Está coluna é uma foreign key da tabela.
 Está coluna faz parte da tabela (lojas.estoques).';
 
 COMMENT ON COLUMN lojas.estoques.quantidade
                         IS 
-'Criação da coluna "quantidade" que têm finalidade registrar a quantidades de produtos.
+'Criação da coluna "quantidade" que têm finalidade registrar
+a quantidades de produtos.
 Está coluna é uma foreign key da tabela.
 Está coluna faz parte da tabela (lojas.estoques).';
 
 CREATE TABLE lojas.clientes (
-cliente_id                 NUMERIC  (38)  NOT NULL,
-email                      VARCHAR  (255) NOT NULL,
-nome                       VARCHAR  (255) NOT NULL,
-telefone1                  VARCHAR  (20)          ,
-telefone2                  VARCHAR  (20)          ,
-telefone3                  VARCHAR  (20)          ,
+cliente_id                   NUMERIC  (38)  NOT NULL,
+email                        VARCHAR  (255) NOT NULL,
+nome                         VARCHAR  (255) NOT NULL,
+telefone1                    VARCHAR  (20)          ,
+telefone2                    VARCHAR  (20)          ,
+telefone3                    VARCHAR  (20)          ,
 CONSTRAINT pk_cliente_id PRIMARY KEY (cliente_id)
 );
 
 -- Comentários das colunas e da tabela (lojas.clientes).
+
 COMMENT ON TABLE lojas.clientes
                         IS
 'Criação da tabela "lojas.clientes" que têm por
@@ -302,22 +327,25 @@ registrar o terceiro número da pessoa caso ela obtenha.
 Coluna que faz parte da tabela (lojas.clientes).';
 
 CREATE TABLE lojas.envios (
-envio_id                    NUMERIC  (38)  NOT NULL,
-loja_id                     NUMERIC  (38)  NOT NULL,
-cliente_id                  NUMERIC  (38)  NOT NULL,
-endereco_entrega            VARCHAR  (512) NOT NULL,
-status                      VARCHAR  (15)  NOT NULL,
+envio_id                   NUMERIC  (38)  NOT NULL,
+loja_id                    NUMERIC  (38)  NOT NULL,
+cliente_id                 NUMERIC  (38)  NOT NULL,
+endereco_entrega           VARCHAR  (512) NOT NULL,
+status                     VARCHAR  (15)  NOT NULL,
 CONSTRAINT pk_envios PRIMARY KEY (envio_id)
 );
 
-/*Adicionando checagem na tabela (lojas.envios) para que a coluna "status" ela dê os resultados informados
+/*Adicionando checagem na tabela (lojas.envios) para que a coluna
+"status" ela dê os resultados informados
 conforme a atualização do pedido.*/
+
 ALTER TABLE lojas.envios
 ADD CONSTRAINT ck_status_envios
 CHECK
 (status in ('CRIADO', 'ENVIADO', 'TRANSITO','ENTREGUE'));
 
 --Comentários das colunas e da tabela (lojas.envio).
+
 COMMENT ON TABLE lojas.envios
                         IS
 'Criação da tabela  "envios" que têm por finalidade
@@ -326,7 +354,8 @@ status da entrega.';
 
 COMMENT ON COLUMN lojas.envios.envio_id
                         IS 
-'Criação da coluna "envio_id", que têm por finalidade identificar o envio do produto.
+'Criação da coluna "envio_id", que têm por finalidade
+identificar o envio do produto.
 Está coluna é uma primary key da tabela.
 Está coluna faz parte da tabela (lojas.envios).';
 
@@ -339,7 +368,8 @@ Está coluna faz parte da tabela (lojas.envios).';
 
 COMMENT ON COLUMN lojas.envios.cliente_id
                         IS
-'Criação da coluna "cliente_id" que têm finalidade identificar clientes que efetuaram pedido.
+'Criação da coluna "cliente_id" que têm finalidade
+identificar clientes que efetuaram pedido.
 Está coluna é uma foreign key da tabela.
 Está coluna faz parte da tabela (lojas.envios).';
 
@@ -365,14 +395,17 @@ CONSTRAINT pk_pedidos PRIMARY KEY (pedido_id)
 );
 
 
-/*Adicionando checagem na tabela (lojas.pedidos) para que a coluna "status" dê as especificações conforme foi
+/*Adicionando checagem na tabela (lojas.pedidos) para que
+a coluna "status" dê as especificações conforme foi
 atualizado.*/  
+
 ALTER TABLE lojas.pedidos
 ADD CONSTRAINT ck_status_pedidos
 CHECK
 (status in ('CANCELADO', 'COMPLETO', 'ABERTO', 'PAGO','REEMBOLSADO', 'ENVIADO'));
 
 --Comentários das colunas e da tabela (lojas.pedidos).
+
 COMMENT ON TABLE lojas.pedidos
                         IS
 'Criação da tabela "pedidos" que têm por finalidade
@@ -406,7 +439,8 @@ Está coluna faz parte da tabela (lojas.pedidos).';
 
 COMMENT ON COLUMN lojas.pedidos.loja_id
                         IS
-'Criação da coluna "loja_id" que têm por finalidade registrar o id da loja que efetuou o pedido.
+'Criação da coluna "loja_id" que têm por finalidade
+registrar o id da loja que efetuou o pedido.
 Está coluna é uma foreign key da tabela.
 Está coluna faz parte da tabela (lojas.pedidos).';
 
@@ -420,18 +454,23 @@ envio_id                            NUMERIC  (38)           ,
 CONSTRAINT pk_pedidos_itens PRIMARY KEY (pedido_id, produto_id)
 );
 
-/*Adicionando checagem na tabela (lojas.pedidos_itens) na coluna "preco_unitario" para que o preço
+/*Adicionando checagem na tabela (lojas.pedidos_itens)
+na coluna "preco_unitario" para que o preço
 seja maior que 0.*/
+
 ALTER TABLE lojas.pedidos_itens
 ADD CONSTRAINT ck_preco_unitario_pedidos_itens
 CHECK
 (preco_unitario > 0);
 
-/* Adicionando checagem na tabela (lojas.pedidos_itens) na coluna "quantidade" para que a quantidade
+/* Adicionando checagem na tabela (lojas.pedidos_itens)
+na coluna "quantidade" para que a quantidade
 seja maior que 0.*/
+
 ALTER TABLE lojas.pedidos_itens ADD CONSTRAINT ck_quantidade_pedidos_itens CHECK (quantidade > 0);
 
 -- Comentários das colunas e da tabela (lojas.pedidos_itens).
+
 COMMENT ON TABLE lojas.pedidos_itens
                         IS 
 'Criação da tabela "pedidos_itens" que têm finalidade de
@@ -440,13 +479,15 @@ pedidos, quantidades e o envio.';
 
 COMMENT ON COLUMN lojas.pedidos_itens.pedido_id
                         IS
-'Criação da coluna "pedido_id" que têm finalidade de identificar os pedidos feitos.
+'Criação da coluna "pedido_id" que têm finalidade de
+identificar os pedidos feitos.
 Está coluna é uma Primary Foreign key da tabela.
 Está coluna faz parte da tabela (lojas.pedidos_itens).';
 
 COMMENT ON COLUMN lojas.pedidos_itens.produto_id
                         IS
-'Criação da coluna "produto_id" que têm finalidade identificar produtos.
+'Criação da coluna "produto_id" que têm finalidade
+identificar produtos.
 Está coluna é uma Primary Foreign key da tabela.
 Está coluna faz parte da tabela (lojas.pedidos_itens).';
 
@@ -470,12 +511,13 @@ Está coluna faz parte da tabela (lojas.pedidos_itens).';
 
 COMMENT ON COLUMN lojas.pedidos_itens.envio_id
                         IS
-'Criação da coluna "envio_id", que têm por finalidade identificar o envio do produto.
+'Criação da coluna "envio_id", que têm por finalidade
+identificar o envio do produto.
 Está coluna é uma primary key da tabela.
 Está coluna faz parte da tabela (lojas.pedidos_itens).';
 
-/*adicionando as "constraints" necessarias
-para verificação do código*/
+/*adicionando as foreign keys para dar
+relacionamentos entre as tabelas.*/
 
 ALTER TABLE lojas.pedidos_itens
 ADD CONSTRAINT produtos_pedidos_itens_fk
