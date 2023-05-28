@@ -132,7 +132,7 @@ endereco_web              VARCHAR  (100)            ,
 endereco_fisico           VARCHAR  (512)            ,
 latitude                  NUMERIC                   ,
 longitude                 NUMERIC                   ,
-logo BYTEA                                          ,                            
+logo                      BYTEA                     ,                            
 logo_mime_type            VARCHAR  (512)            ,
 logo_arquivo              VARCHAR  (512)            ,
 logo_charset              VARCHAR  (512)            ,
@@ -516,7 +516,7 @@ identificar o envio do produto.
 Está coluna é uma primary key da tabela.
 Está coluna faz parte da tabela (lojas.pedidos_itens).';
 
-/*adicionando as foreign keys para dar
+/* Adicionando as foreign keys para dar
 relacionamentos entre as tabelas.*/
 
 ALTER TABLE lojas.pedidos_itens
