@@ -8,4 +8,4 @@ ___
 
 O *script* gerado do diagrama obtem todos os comentários das tabelas e colunas feitas no Banco de Dados.
 
-O *PDF* está o projeto do Banco de Dados "uvv" com todas as relações das tabelas e as colunas.
+O *PDF* está o projeto do Banco de Dados "uvv" com todas as relações das tabelas e as colunas. 
