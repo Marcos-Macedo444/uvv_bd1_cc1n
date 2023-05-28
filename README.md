@@ -27,4 +27,3 @@ ___
 #### *Estudante da Universidade Vila Velha (UVV).*
 #### *Professor Abrantes Araújo Silva Filho.*
 #### *Disciplina Design e Desenvolvimento de Banco de Dados 1.*
->>>>>>> 49e98ee6ddcb6fc1a6888a9d8958b3fc2d8a0b53
