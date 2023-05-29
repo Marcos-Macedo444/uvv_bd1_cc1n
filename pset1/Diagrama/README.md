@@ -9,3 +9,10 @@ ___
 O *script* gerado do diagrama obtem todos os comentários das tabelas e colunas feitas no Banco de Dados.
 
 O *PDF* está o projeto do Banco de Dados "uvv" com todas as relações das tabelas e as colunas. 
+___
+
+#### *Projeto/Trabalho desenvolvido por Marcos Filipe de Paula Macêdo.*
+####  *Turma CC1N*
+#### *Estudante da Universidade Vila Velha (UVV).*
+#### *Professor Abrantes Araújo Silva Filho.*
+#### *Disciplina Design e Desenvolvimento de Banco de Dados 1.*
