@@ -1,5 +1,5 @@
  # SCRIPT
-___
+___ 
 
 ### A pasta "script" ela contém a implementação de um projeto lógico de banco de dados que simula uma pequena rede de lojas, as “Lojas UVV”. Os Sistemas de Gerenciamento de Banco de Dados (SGBDS) que foram utilizados foi: 
 <br>
